@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
+#include "child.h"
 using namespace std;
-template <class T>
 
 int main(){
-    int arr[100]; // static allocate -> take 4 * 100 = 400 bytes from stack memory for array
-    int* parr;
-    parr = new int[100]; // dynamic allocate -> take 4 * 100 = 400 bytes from heap memory for array
-    //delete : de-allocate the memory that is allocated by new
+    Child c1("Angie", "Ham", 7), c2("Pradnya", "Dhala", 8);
+    // Child newChild; //declare -> using Child() constructor
+    // newChild  = c1; //assign value -> using = operator
+    Child newChild = c1;// initialize -> copy constructor
 }

@@ -23,6 +23,7 @@ int main()
     {
         cout << "ERROR::: Duplicate" << endl;
     }
+
     class2.Insert(&c4);
     class2.Insert(&c5);
     class2.Insert(&c6);
@@ -32,8 +33,9 @@ int main()
     class1.Merge(class2);
     class2.Merge(class1);
     class1.Merge(class2);
-    class1.Merge(class1);
+    class1.Merge(class1); //merge itself
     cout << "class1 and 2 Merged: " << class1 << endl;
+
     class1.Remove(c4, c11);
     class1.Remove(c5, c11);
     class1.Remove(c11, c11);
@@ -46,9 +48,10 @@ int main()
     soccer.Insert(&c4);
     soccer.Insert(&c9);
     cout << "soccer: " << soccer << endl;
-    soccer += class1;
+    // soccer += class1;
+    soccer = soccer + class1;
     cout << "soccer += class1 : " << soccer << endl;
-    List342<Child> football = soccer;
+    List342<Child> football = soccer; // initialize football and copy all node of soccer to footbool -> using copy constructor
     if (football == soccer)
     {
         cout << "football: " << football << endl;
@@ -57,6 +60,7 @@ int main()
     {
         cout << c11 << " is on the football team" << endl;
     }
+
     soccer.DeleteList();
     List342<int> numbers;
     numbers.Insert(&a);
@@ -64,4 +68,5 @@ int main()
     numbers.Insert(&c);
     cout << "These are the numbers: " << numbers << endl;
     numbers.DeleteList();
+
 }

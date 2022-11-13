@@ -62,15 +62,26 @@ List342<ObjectType>::List342() : head_(nullptr) {}
 template<class ObjectType>
 List342<ObjectType>::List342(const List342& source)
 {
-	// head_ = nullptr;
-	// *this = source;
-	//source is another linked list
-	// copy all nodes from source to this list
+	//source must be a sorted list
+
+	//copy all nodes of source to this
 	Node* temp = source.head_;
+	this->head_ = nullptr; // initialize -> head pointer must be null
+	Node* tail = nullptr; // pointer that points to the tail of current list
 	while(temp != nullptr){
-		this->Insert((temp->data));
-		temp = temp->next;
+		Node* newNode = new Node(temp->data); //creat new node to insert to this
+		if(head_ == nullptr){
+			//insert to head
+			head_ = newNode;
+			tail = head_;
+		}else{
+			//just insert to tail
+			tail->next = newNode; //link tail to new node
+			tail = newNode; //update pointer tail to new tail
+		}
+		temp = temp->next; //move temp on source
 	}
+
 }
 
 template<class ObjectType>
@@ -111,6 +122,8 @@ bool List342<ObjectType>::Insert(ObjectType* obj)
 		Node* temp = head_;
 		while(temp != nullptr){
 			if(*obj == *(temp->data)){
+				delete node1; //delete new node because not insert -> must deallocate
+				node1 = nullptr;
 				return false;
 			}
 			temp = temp->next;
@@ -198,8 +211,13 @@ void List342<ObjectType>::DeleteList(){
 
 template<class ObjectType>
 bool List342<ObjectType>::Merge(List342<ObjectType>& list1){
-	
+	if(*this == list1){
+		//merge itself
+		return false;
+	}
+	//not use more new memory
 	if(head_ == nullptr){
+		//copy all nodes of list1 to this and set list = empty
 		head_ = list1.head_;
 		list1.head_ = nullptr;
 		return true;
@@ -209,11 +227,8 @@ bool List342<ObjectType>::Merge(List342<ObjectType>& list1){
 		return true;
 	}
 
-	Node* prev1 = nullptr; 
-	Node* cur1 = this->head_;
-	Node* prev2 = nullptr;
-	Node *cur2 = list1.head_; //list = rhs
-	
+	Node* prev1 = nullptr; Node* cur1 = head_; // 2 pointers to move on this list
+	Node* prev2 = nullptr; Node* cur2 = list1.head_; //pointers to move on list1
 	while(cur1 != nullptr && cur2 != nullptr){
 		if(*(cur1->data) == *(cur2->data)){
 			prev1 = cur1;
@@ -221,18 +236,22 @@ bool List342<ObjectType>::Merge(List342<ObjectType>& list1){
 
 			prev2 = cur2;
 			cur2 = cur2->next;
+
 			delete prev2;
+			prev2 = nullptr;
 		}else{
 			if(*(cur1->data) > *(cur2->data)){
+				//insert cur2 to this list
 				prev2 = cur2;
 				cur2 = cur2->next;
-				// cout << (prev1 == nullptr) << endl;
+				//insert prev2 to this
 				if(prev1 == nullptr){
-					prev2->next = cur1;
-					this->head_ = prev2;
-					prev1 = prev2; 
+					prev2->next = head_;
+					head_ = prev2;
+					prev1 = head_;
 				}
 			}else{
+				//*(cur1->data) < *(cur2->data) -> move pointers on this
 				prev1 = cur1;
 				cur1 = cur1->next;
 			}
@@ -243,66 +262,133 @@ bool List342<ObjectType>::Merge(List342<ObjectType>& list1){
 		prev1->next = cur2;
 		cur2 = nullptr;
 	}
-	list1.head_ == nullptr;
+
+	list1.head_ = nullptr;//set list1 empty
 	return true;
 }
 
 template<class ObjectType>
 List342<ObjectType>& List342<ObjectType>::operator=(const List342<ObjectType>& source){
+	//same as copy constructor
 	//return the reference to current linked list
 	DeleteList(); // delete old list;
 	Node* temp = source.head_;
+	Node* tail = nullptr; // pointer that points to the tail of current list
 	while(temp != nullptr){
-		Insert(temp->data);
+		Node* newNode = new Node(temp->data); //creat new node to insert to this
+		if(head_ == nullptr){
+			//insert to head
+			head_ = newNode;
+			tail = head_;
+		}else{
+			//just insert to tail
+			tail->next = newNode; //link tail to new node
+			tail = newNode; //update pointer tail to new tail
+		}
+		temp = temp->next; //move temp on source
 	}
 	return *this;
 }
 template<class ObjectType>
 List342<ObjectType> List342<ObjectType>::operator+(const List342<ObjectType>& rhs){
 	List342<ObjectType> result;
-	result = *this;
-
-	if(result.head_ == nullptr){ // this block is run is this is null -> head_ of result is null -> just result = rhs;
-		result = rhs;
-		return result;
-	}
-
-	if(rhs.head_ == nullptr){
-		return result;
-	}
-
-	Node* prev1 = nullptr; Node* cur1 = result.head_;
-	Node* prev2 = nullptr; Node* cur2 = rhs.head_;
+	Node* tail = nullptr; //this pointer points to the tail of result
+	Node* cur1 = this->head_; // 2 pointers to move on this list
+	Node* cur2 = rhs.head_; //pointers to move on list1
 	while(cur1 != nullptr && cur2 != nullptr){
 		if(*(cur1->data) == *(cur2->data)){
-			prev1 = cur1;
+			
+			//creat new node with data -> insert to result
+			Node* newNode = new Node(cur1->data);
+			if(result.head_ == nullptr){
+				//insert to head of result
+				newNode->next = result.head_;
+				result.head_ = newNode;
+				tail = result.head_;
+			}else{
+				//insert after tail -> link tail with new node
+				tail->next = newNode;
+				tail = newNode;
+			}
 			cur1 = cur1->next;
-			prev2 = cur2;
 			cur2 = cur2->next;
-			result.Insert(prev1->data); // insert 1 trong 2 nodes
+			
 		}else{
 			if(*(cur1->data) > *(cur2->data)){
-				prev2 = cur2;
+				//creat new node with data of cur2 -> insert to this
+				Node* newNode = new Node(cur2->data);
+				//insert newNode to this
+				if(result.head_ == nullptr){
+				//insert to head of result
+					newNode->next = result.head_;
+					result.head_ = newNode;
+					tail = result.head_;
+				}else{
+					//insert after tail -> link tail with new node
+					tail->next = newNode;
+					tail = newNode;
+				}
+
+				//moving pointers on rhs list
 				cur2 = cur2->next;
-				result.Insert(prev2->data);
-				
+
 			}else{
-				prev1 = cur1;
+				//*(cur1->data) < *(cur2->data) -> move pointers on this
+				//creat new node with data of cur1 and insert it to result
+				Node* newNode = new Node(cur1->data);
+				//insert newNode to this
+				if(result.head_ == nullptr){
+				//insert to head of result
+					newNode->next = result.head_;
+					result.head_ = newNode;
+					tail = result.head_;
+				}else{
+					//insert after tail -> link tail with new node
+					tail->next = newNode;
+					tail = newNode;
+				}
+
+				//moving pointers on list
 				cur1 = cur1->next;
-				result.Insert(prev1->data);
 			}
 		}
 	}
 
-	//case 1: cur1 is null
-	while(cur2 != nullptr){
-		result.Insert(cur2->data);
+	while(cur2 != nullptr){ //cur1 = null, cur2 != null
+		//rhs list remains nodes
+		Node* newNode = new Node(cur2->data);
+		//insert newNode to this
+		if(result.head_ == nullptr){
+		//insert to head of result
+			newNode->next = result.head_;
+			result.head_ = newNode;
+			tail = result.head_;
+		}else{
+			//insert after tail -> link tail with new node
+			tail->next = newNode;
+			tail = newNode;
+		}
+
+		//moving pointers on list
 		cur2 = cur2->next;
 	}
 
-	//case 2: cur2 is null
-	while(cur1 != nullptr){
-		result.Insert(cur1->data);
+	while(cur1 != nullptr){ //cur1 != null, cur2 == null
+		//rhs list remains nodes
+		Node* newNode = new Node(cur1->data);
+		//insert newNode to this
+		if(result.head_ == nullptr){
+		//insert to head of result
+			newNode->next = result.head_;
+			result.head_ = newNode;
+			tail = result.head_;
+		}else{
+			//insert after tail -> link tail with new node
+			tail->next = newNode;
+			tail = newNode;
+		}
+
+		//moving pointers on list
 		cur1 = cur1->next;
 	}
 
@@ -314,67 +400,64 @@ List342<ObjectType> List342<ObjectType>::operator+(const List342<ObjectType>& rh
 template<class ObjectType>//list1 += list2 : 2 operands: left(this object) and right (object passed(rsh))
 List342<ObjectType>& List342<ObjectType>::operator+=(const List342<ObjectType>& rhs) 
 {
-	if ((this->head_ == nullptr) && (rhs.head_ == nullptr))
-	{
-		return *this;
-	}
-	//if list 1 empty -> traverse through list2 and insert each node to list 1
-	
-	if (this->head_ == nullptr)
-	{
-		Node* temp = rhs.head_;
-		while(temp != nullptr){
-			this->Insert(temp->data);
-			temp = temp->next;
-		}
-		return *this;
-	}
-
-	//if list 2 empty, result will be list 1 only
-	if (rhs.head_ == nullptr)
-	{
-		return *this;
-	}
-	
-	Node* prev1 = nullptr; Node* cur1 = this->head_;
-	Node* prev2 = nullptr; Node* cur2 = rhs.head_;
-	while (cur1 != nullptr && cur2 != nullptr) {
-		if (*(cur1->data) == *(cur2->data)) {
+	Node* prev1 = nullptr; Node* cur1 = head_; // 2 pointers to move on this list
+	Node* prev2 = nullptr; Node* cur2 = rhs.head_; //pointers to move on list1
+	while(cur1 != nullptr && cur2 != nullptr){
+		if(*(cur1->data) == *(cur2->data)){
 			prev1 = cur1;
 			cur1 = cur1->next;
+
 			prev2 = cur2;
 			cur2 = cur2->next;
-			//ignore cur2 and cur1 -> update cur1 and cur2
-			//neu nhu 2 cur bang nhau, vay minh giu lai 1 cur->data?
-		}
-		else {
-			if (*(cur1->data) > *(cur2->data)) {
+			//just moving pointers -> no delete
+		}else{
+			if(*(cur1->data) > *(cur2->data)){
+				//creat new node with data of cur2 -> insert to this
+				Node* newNode = new Node(cur2->data);
+				//insert newNode to this
+				if(prev1 == nullptr){
+					//insert to head
+					newNode->next = head_;
+					head_ = newNode;
+					prev1 = head_;
+				}else{
+					//insert after prev1 and before cur1
+					newNode->next = cur1;
+					prev1->next = newNode;
+					prev1 = newNode;
+				}
+
+				//moving pointers on rhs list
 				prev2 = cur2;
 				cur2 = cur2->next;
-				this->Insert(prev2->data); // insert this node of list2 to list1
-			}
-			else { // current node of list1 has data > list2
-			//case: cur1->data < cur2->data
+
+			}else{
+				//*(cur1->data) < *(cur2->data) -> move pointers on this
 				prev1 = cur1;
 				cur1 = cur1->next;
-				// this->Insert(*(prev1->data)); // insert current node of list1 to list1
-				//just move cur1 and prev1
 			}
 		}
 	}
 
-	//case 1: cur1 is null
-	while (cur2 != nullptr) {
-		this->Insert(cur2->data);
-		cur2 = cur2->next;
+	while(cur2 != nullptr){
+		//rhs list remains nodes
+		Node* newNode = new Node(cur2->data);
+		//insert newNode to this
+		if(prev1 == nullptr){
+			//insert to head
+			newNode->next = head_;
+			head_ = newNode;
+			prev1 = head_;
+		}else{
+			//insert after prev1 and before cur1
+			newNode->next = cur1;
+			prev1->next = newNode;
+			prev1 = newNode;
+		}
+
+		cur2 = cur2->next; //move cur2
 	}
 
-	// //case 2: cur2 is null -> return 
-
-	// while (cur1 != nullptr) {
-	// 	this->Insert(*(cur1->data));
-	// 	cur1 = cur1->next;
-	// }
 	return *this;
 }
 
