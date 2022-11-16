@@ -100,13 +100,17 @@ bool List342<ObjectType>::BuildList(string file_name)
 	{
 		return false;
 	}
-	ObjectType item;
-	while (infile.eof()) //if haven't read to the end of the file
+	// ObjectType item;
+	Node*tail = nullptr;
+	while (!infile.eof()) //if haven't read to the end of the file
 	{
-		infile >> item;
-		Insert(&item);
+		// ObjectType tp;
+		// cout << "Address: " << &tp << endl;
+		ObjectType* item = new ObjectType;
+		infile >> *item;
+		Insert(item);
 	}
-	infile.close();
+	infile.close();	
 	return true;
 }
 // Insert an object in a correct place, find a correct place, create a node
@@ -115,6 +119,7 @@ template<class ObjectType>
 bool List342<ObjectType>::Insert(ObjectType* obj)
 {
 	Node* node1 = new Node(obj); //dynamic allocate a new node
+	
 	if(head_ == nullptr){
 		head_ = node1;
 		return true;
