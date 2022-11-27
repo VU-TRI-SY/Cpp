@@ -1,0 +1,9 @@
+Viết 1 chương trình quản lý hệ thống đỗ xe
+1. Tạo ra một queue để phục vục việc đỗ xe (queue với size lớn nhất có thể là 5);
+2. Cho phép một xe mới đi vào trong queue (check xem queue còn đủ chỗ trống hay không)
+3. Cho phép một xe rồi khỏi queue đi vào trong bãi đỗ(dequeue, check queue có xe nào hay không)
+4. Cho phép in ra thông tin toàn bộ các xe có trong queue
+5. In ra thông tin của xe đầu hoặc cuối của queue
+6. Thoát chương trình
+
+

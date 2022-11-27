@@ -1,0 +1,12 @@
+Viết 1 chương trình quản lý các sản phẩm laptop trong 1 cửa hàng sửa dụng data structure Stack
+laptop{
+    id: "D102" (string)
+    name: "Dell Latitude" (string)
+    price:: 800.5$ (double/float)
+}
+
+Viết main có in ra menu để quả lý:
+1. Add 1 laptop mới vào kho (add vào top)
+2. Xoá đi 1 laptop (xoá laptop ở Top)
+3. In ra thông tin toàn bộ các laptop có trong cửa hàng (function display())
+4. Thoát
