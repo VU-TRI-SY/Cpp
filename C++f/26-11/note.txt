@@ -1,0 +1,29 @@
+Static array:
+1. Is an array that the size is defined when we creat array
+int arr[100]; 
+-> Yêu cầu CPU dành ra 100 cell(ô nhớ) đứng liền kề(liên tục) trong Ram để dùng làm không gian bộ nhớ lưu trữ cho arr
+-> problem: 
+1. chỉ dùng 30 ô để lưu 30 elementes -> lãng phí 70 ô (70*4 = 280 bytes)
+2. Muốn lưu 200 elements vào trong arr -> không đủ không gian bộ nhớ của arr
+
+Dynamic array: vector
+Là một arrary mà size có thể thay đổi được trong quá trình program chạy
+Chậm hơn static array
+Có sẵn 1 số built-in funtions (functions được định nghĩa sẵn)
+
+
+Child arr[100];
+vector<Child> ct;
+
+int arr[50];
+vector<int> vt;
+
+
+BSTree: lưu các accounts
+Queue: lưu các transactions xếp hàng đợi handle
+
+Fund và Transaction : không cần methods
+Accounts: toàn bộ các behaviors(methods) mà 1 account phải có: withdraw, deposit, display history
+
+1. 1 transaction fail -> lưu vào trong history của account liên quan hay không?
+2. Có cần in ra thông tin của các transaction fail hay không?

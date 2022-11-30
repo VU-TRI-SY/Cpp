@@ -100,13 +100,14 @@ bool List342<ObjectType>::BuildList(string file_name)
 	{
 		return false;
 	}
-	// ObjectType item;
 	Node*tail = nullptr;
+	ObjectType *item;
 	while (!infile.eof()) //if haven't read to the end of the file
 	{
-		// ObjectType tp;
+		//voi moi lan lap, se tao ra 1 item moi de luu data doc duoc tu file
+		// ObjectType item; //static declaration - on stack
 		// cout << "Address: " << &tp << endl;
-		ObjectType* item = new ObjectType;
+		item =  new ObjectType; // item is a pointer to dynamic memory on heap
 		infile >> *item;
 		Insert(item);
 	}
